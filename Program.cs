@@ -14,7 +14,6 @@ builder.Services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
 builder.Services.AddSingleton<IAuthRepository, AuthRepository>();
 builder.Services.AddSingleton<IUserService , UserService>();
 builder.Services.AddSingleton<IJwtBearerHandller, JwtBearerHandller>();
-builder.Services.AddSingleton<IPasswordHasher,PasswordHasher>();
 builder.Services.Configure<DefaultConnectionOption>(builder.Configuration.GetSection("ConnectionStrings"));
 
 var app = builder.Build();
