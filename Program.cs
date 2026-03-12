@@ -3,7 +3,7 @@ using Authentication_Service.Options;
 using Authentication_Service.Repositories;
 using Authentication_Service.Services;
 using Authentication_Service.Strategies;
-
+using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -14,9 +14,8 @@ builder.Services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
 builder.Services.AddSingleton<IAuthRepository, AuthRepository>();
 builder.Services.AddSingleton<IUserService , UserService>();
 builder.Services.AddSingleton<IJwtBearerHandller, JwtBearerHandller>();
-builder.Services.AddSingleton<IPasswordHasher,PasswordHasher>();
 builder.Services.Configure<DefaultConnectionOption>(builder.Configuration.GetSection("ConnectionStrings"));
-
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
