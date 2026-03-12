@@ -8,10 +8,12 @@ namespace Authentication_Service.Services
     public class UserService :IUserService
     {
         private readonly IAuthRepository _repo;
+        private readonly IJwtBearerHandller _jwtHandller;
 
-        public UserService(IAuthRepository authRepository)
+        public UserService(IAuthRepository authRepository,IJwtBearerHandller jwtBearerHandller)
         {
             this._repo = authRepository;
+            this._jwtHandller = jwtBearerHandller;
         }
         public async Task<LoginResult> AuthenticateUser(string email, string password)
         {
@@ -25,7 +27,8 @@ namespace Authentication_Service.Services
             if (result.Equals(PasswordVerificationResult.Failed))
                 return new LoginResult(false, string.Empty);
             //All is good generate token and return :)
-            return null;
+            string token = this._jwtHandller.GenerateToken(user);
+            return new LoginResult(true,token);
         }
     }
 }
