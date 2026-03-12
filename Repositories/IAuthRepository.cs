@@ -6,7 +6,7 @@ namespace Authentication_Service.Repositories
     public interface IAuthRepository
     {
         Task<Users> RegisterUser(Users user);
-        Users? GetUserByEmail(string email);
+        Task<Users?> GetUserByEmail(string email);
         Task<Users?> GetUserById(Guid Id);
     }
 }

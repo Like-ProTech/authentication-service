@@ -70,9 +70,28 @@ namespace Authentication_Service.Repositories
             }
         }
 
-        public Users? GetUserByEmail(string email)
+        public async Task<Users?> GetUserByEmail(string email)
         {
-            throw new NotImplementedException();
+            using var conn = _factory.GetConnection("primary");
+            await conn.OpenAsync();
+
+            var query = "SELECT Id, Email, PasswordHash FROM Users WHERE Email = @Email";
+            using var cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@Email", email);
+
+            using var reader = await cmd.ExecuteReaderAsync();
+            if (await reader.ReadAsync())
+            {
+                return new Users
+                {
+                    Id = reader.GetGuid(reader.GetOrdinal("Id")),
+                    Email = reader.GetString(reader.GetOrdinal("Email")),
+                    PasswordHash = reader.GetString(reader.GetOrdinal("PasswordHash"))
+                };
+            }
+
+            return null;
         }
+
     }
 }
